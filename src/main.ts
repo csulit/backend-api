@@ -3,7 +3,7 @@ import * as compression from 'compression';
 import * as cookieParser from 'cookie-parser';
 import * as helmet from 'helmet';
 import { AppModule } from './app.module';
-import TransformInterceptor from './common/interceptor/transform.interceptor';
+import TransformInterceptor from './common/interceptors/transform.interceptor';
 import { PrismaClientService } from './prisma-client/prisma-client.service';
 
 async function bootstrap() {

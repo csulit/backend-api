@@ -2,7 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["interactiveTransactions", "fullTextSearch", "filterJson"]
 }
 
 datasource db {
@@ -14,17 +15,34 @@ model User {
   id                String    @id @default(uuid())
   username          String    @db.VarChar(100)
   email             String    @db.VarChar(100)
+  profileId         String    @unique
+  profile           Profile   @relation(fields: [profileId], references: [id])
   password          String
   confirmPassword   String    @map("confirm_password")
+  roles             String[]
+  isLocked          Boolean   @default(false) @map("is_locked")
+  isEmailVerified   Boolean   @default(false) @map("is_email_verified")
   resetToken        String?   @map("reset_token")
   resetTokenExpiry  DateTime? @map("reset_token_expiry")
   passwordChangedAt DateTime? @map("password_changed_at")
+  createdAt         DateTime  @default(now()) @map("created_at")
+  updatedAt         DateTime  @updatedAt @map("updated_at")
 
   @@map("users")
 }
 
 model Profile {
-  id String @id @default(uuid())
+  id        String @id @default(uuid())
+  user      User?
+  firstName String @db.VarChar(100)
+  lastName  String @db.VarChar(100)
+  fullName  String @db.VarChar(100)
 
   @@map("profiles")
+}
+
+model RoleAndPermission {
+  id String @id @default(uuid())
+
+  @@map("roles_and_permissions")
 }
